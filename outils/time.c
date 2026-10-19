@@ -6,12 +6,11 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/23 16:34:44 by osamet            #+#    #+#             */
-/*   Updated: 2026/10/18 17:45:39 by osamet           ###   ########.fr       */
+/*   Updated: 2026/10/19 01:23:30 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
-#include <stdio.h>
+#include "../codexion.h"
 
 unsigned long long time_ms(void)
 {

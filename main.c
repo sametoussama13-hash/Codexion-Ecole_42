@@ -6,7 +6,7 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 23:41:59 by osamet            #+#    #+#             */
-/*   Updated: 2026/10/18 20:15:40 by osamet           ###   ########.fr       */
+/*   Updated: 2026/10/19 00:53:40 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 int	main(int argc, char **argv)
 {
-	int		i;
 	t_config	*config;
 
 	if (argc != 9)
@@ -26,10 +25,13 @@ int	main(int argc, char **argv)
 	}
 	config = malloc(sizeof(t_config));
 	if (config == NULL)
+	{
+		printf("faild to malloc config struct");
 		exit (1);
+	}
 	config->time_start = time_ms();
 	parsing(argc, argv, config);
-	init_struct(config);
+	build_struct(config);
 	
 	all_free(config);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 14:26:23 by osamet            #+#    #+#             */
-/*   Updated: 2026/10/18 20:45:46 by osamet           ###   ########.fr       */
+/*   Updated: 2026/10/19 02:08:59 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <string.h>
 # include <pthread.h>
 # include <sys/time.h>
+# include <stdio.h>
 
 typedef enum s_scheduler
 {
@@ -29,6 +30,14 @@ typedef struct s_thread
 	pthread_t	thread;
 }	t_thread;
 
+typedef struct s_dongle
+{
+	int					id;
+	int					is_taken;
+	unsigned long long 	available_at;
+	pthread_mutex_t		mutex;
+}	t_dongle;
+
 typedef struct s_coder
 {
 	int					id;
@@ -37,15 +46,8 @@ typedef struct s_coder
 	unsigned long long 	last_compile_start;
 	int					compile_count;
 	t_thread			thread;
+	struct s_config		*config;
 }	t_coder;
-
-typedef struct s_dongle
-{
-	int					id;
-	int					is_taken;
-	unsigned long long 	available_at;
-	pthread_mutex_t		mutex;
-}	t_dongle;
 
 typedef struct s_config
 {
@@ -77,21 +79,32 @@ int			convert_nbr(char *str, int i);
 //----- parsing time -----//
 void		parsing_time(char *str, t_config *config, int i);
 void		time_to_compile(char *str, t_config *config);
-int			time_convert(char *str, int i);
+unsigned long long	time_convert(char *str, int i);
 
 //----- parsing Scheduler -----//
 void		scheduler(char *str, t_config *config);
 
-//*************** create & Init structers ***************//
+//*************** create structers ***************//
+void    	build_struct(t_config *config);
 void		create_coders_struct(t_config *config);
 void		create_dongle_struct(t_config *config);
+void    	create_threads(t_config *config);
+void		join_threads(t_config *config);
+
+//*************** init structers ***************//
+void	    init_dongle(t_config *config, t_dongle *dongles);
+void    	init_coders(t_config *config, t_coder *coders);
+void    	assigned_dongle_to_coders(t_config *config);
 
 //*************** outils ***************//
 int			ft_strlen(char *str);
 int			ft_isdigit(char *str);
-int			strcamp(char *str1, char *str2);
+int			ft_strcamp(char *str1, char *str2);
 void    	all_free(t_config *config);
 unsigned long long	time_ms(void);
 unsigned long long	ft_atoull(char *str);
+
+//*************** fonction coder ***************//
+void    *coder_routine(void *arg);
 
 #endif

@@ -6,11 +6,11 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 15:16:33 by osamet            #+#    #+#             */
-/*   Updated: 2026/10/18 20:12:13 by osamet           ###   ########.fr       */
+/*   Updated: 2026/10/19 00:55:31 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "../codexion.h"
 
 void	parsing_time(char *str, t_config *config, int i)
 {

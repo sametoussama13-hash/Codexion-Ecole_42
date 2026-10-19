@@ -6,7 +6,7 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/22 17:36:56 by osamet            #+#    #+#             */
-/*   Updated: 2026/10/18 20:34:51 by osamet           ###   ########.fr       */
+/*   Updated: 2026/10/19 00:55:01 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	convert_nbr(char *str, int i)
 	nbr = atoi(str);
 	if (nbr < 1)
 	{
-		printf("error: %s should not be less than 1",name_argument(i), nbr);
+		printf("error: %s should not be less than 1",name_argument(i));
 		exit(1);
 	}
 	return (nbr);
