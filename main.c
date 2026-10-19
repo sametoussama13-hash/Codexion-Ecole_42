@@ -6,11 +6,10 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 23:41:59 by osamet            #+#    #+#             */
-/*   Updated: 2026/10/19 00:53:40 by osamet           ###   ########.fr       */
+/*   Updated: 2026/10/19 15:27:27 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "codexion.h"
 
 
