@@ -6,7 +6,7 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 15:40:49 by osamet            #+#    #+#             */
-/*   Updated: 2026/10/19 02:09:37 by osamet           ###   ########.fr       */
+/*   Updated: 2026/10/21 23:30:25 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ void    init_coders(t_config *config, t_coder *coders)
 	{
 		coders[i].id = i + 1;
 		coders[i].config = config;
+		coders[i].left = NULL;
+		coders[i].right = NULL;
+		coders[i].last_compile_start = 0;
+		coders[i].compile_count = 0;
 		i ++;
 	}
 	config->coders = coders;
@@ -33,7 +37,7 @@ void    init_dongle(t_config *config, t_dongle *dongles)
     i = 0;
 	while (i < config->nbr_dongles)
 	{
-		dongles[i].id = 0;
+		dongles[i].id = i;
 		dongles[i].is_taken = 0;
 		dongles[i].available_at = 0;
 		pthread_mutex_init(&dongles[i].mutex, NULL);

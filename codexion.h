@@ -6,13 +6,14 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 14:26:23 by osamet            #+#    #+#             */
-/*   Updated: 2026/10/19 02:08:59 by osamet           ###   ########.fr       */
+/*   Updated: 2026/10/21 23:10:41 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CODEXION_H
 # define CODEXION_H
 
+# include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
 # include <pthread.h>
@@ -63,6 +64,7 @@ typedef struct s_config
 	t_coder				*coders;
 	t_dongle			*dongles;
 	t_scheduler			scheduler;
+	pthread_mutex_t		mutex_print;
 }	t_config;
 
 //*************** main ***************//
@@ -105,6 +107,10 @@ unsigned long long	time_ms(void);
 unsigned long long	ft_atoull(char *str);
 
 //*************** fonction coder ***************//
-void    *coder_routine(void *arg);
+void    	*coder_routine(void *arg);
+void    	logger(t_coder *coder, char *str);
+void    	compile(t_config *config, t_coder *coder);
+void    	debug(t_config *config, t_coder *coder);
+void    	refactor(t_config *config, t_coder *coder);
 
 #endif
