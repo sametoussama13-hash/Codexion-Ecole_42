@@ -6,7 +6,7 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 15:40:49 by osamet            #+#    #+#             */
-/*   Updated: 2026/10/21 23:34:58 by osamet           ###   ########.fr       */
+/*   Updated: 2026/11/19 20:09:44 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ void    *coder_routine(void *arg)
     config = coder->config;
     while (coder->compile_count < config->nbr_of_compiles_re)
     {
+        if (lock_dongle(coder->left, coder->right) != 0)
+            return (NULL);
         compile(config, coder);
+        unlock_dongle(coder->left, coder->right);
         debug(config, coder);
         refactor(config, coder);
     }

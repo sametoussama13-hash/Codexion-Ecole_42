@@ -5,7 +5,7 @@ AR = ar
 RM = rm -f
 
 SRCS = main.c parsing.c parsing/parsing_nbr.c parsing/parsing_time.c parsing/scheduler.c outils/free.c outils/str.c outils/time.c \
-	   coder_fonction/coder_routine.c build/create.c build/init.c coder_fonction/print.c
+	   coder_fonction/coder_routine.c build/create.c build/init.c coder_fonction/print.c dongle_fonction/check_dongle.c dongle_fonction/mutex.c
 
 OBJS = $(SRCS:.c=.o)
 

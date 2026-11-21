@@ -6,7 +6,7 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 14:26:23 by osamet            #+#    #+#             */
-/*   Updated: 2026/10/21 23:10:41 by osamet           ###   ########.fr       */
+/*   Updated: 2026/11/19 20:32:07 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,11 @@ void    	logger(t_coder *coder, char *str);
 void    	compile(t_config *config, t_coder *coder);
 void    	debug(t_config *config, t_coder *coder);
 void    	refactor(t_config *config, t_coder *coder);
+
+//*************** fonction dongle ***************//
+int			lock_dongle(t_dongle *left, t_dongle *right);
+void		unlock_dongle(t_dongle *left, t_dongle *right);
+void    	unlock_mutex(t_dongle *left, t_dongle *right);
+void    	lock_mutex(t_dongle *left, t_dongle *right);
 
 #endif
