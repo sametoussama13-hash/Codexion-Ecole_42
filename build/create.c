@@ -6,19 +6,18 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 15:40:49 by osamet            #+#    #+#             */
-/*   Updated: 2026/10/21 23:26:27 by osamet           ###   ########.fr       */
+/*   Updated: 2026/11/22 20:28:12 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../codexion.h"
 
-void    build_struct(t_config *config)
+void	build_struct(t_config *config)
 {
-    create_coders_struct(config);
+	init_config(config);
+	create_coders_struct(config);
 	create_dongle_struct(config);
-	pthread_mutex_init(&config->mutex_print, NULL);
-	config->time_start = time_ms();
-    assigned_dongle_to_coders(config);
+	assigned_dongle_to_coders(config);
 	create_threads(config);
 	join_threads(config);
 }
@@ -31,11 +30,11 @@ void	create_coders_struct(t_config *config)
 	if (!coders)
 	{
 		printf("error: faild to malloc coders struct");
-        all_free(config);
+		all_free(config);
 		exit (1);
 	}
 	memset(coders, 0, sizeof(t_coder) * config->nbr_coders);
-    init_coders(config, coders);
+	init_coders(config, coders);
 }
 
 void	create_dongle_struct(t_config *config)
@@ -46,29 +45,36 @@ void	create_dongle_struct(t_config *config)
 	if (!dongles)
 	{
 		printf("error: faild to malloc dongles struct");
-        all_free(config);
+		all_free(config);
 		exit (1);
 	}
 	memset(dongles, 0, sizeof(t_dongle) * config->nbr_dongles);
-    init_dongle(config, dongles);
+	init_dongle(config, dongles);
 }
 
-void    create_threads(t_config *config)
+void	create_threads(t_config *config)
 {
-    int i;
+	int	i;
 
 	i = 0;
-	
-    while (i < config->nbr_coders)
-    {
-        if (pthread_create(&config->coders[i].thread.thread, NULL, coder_routine, &config->coders[i]) != 0)
-        {
-            printf("error: pathread cration failed");
-            all_free(config);
-            exit (1);
-        }
-        i++;
-    }
+	while (i < config->nbr_coders)
+	{
+		if (pthread_create(&config->coders[i].thread.thread, NULL,
+				coder_routine, &config->coders[i]) != 0)
+		{
+			printf("error: pathread cration failed");
+			all_free(config);
+			exit (1);
+		}
+		i++;
+	}
+	if (pthread_create(&config->thread_monitor.thread, NULL,
+			monitoring, config) != 0)
+	{
+		printf("error: pathread monitoring failed");
+		all_free(config);
+		exit (1);
+	}
 }
 
 void	join_threads(t_config *config)
@@ -81,4 +87,5 @@ void	join_threads(t_config *config)
 		pthread_join(config->coders[i].thread.thread, NULL);
 		i++;
 	}
+	pthread_join(config->thread_monitor.thread, NULL);
 }

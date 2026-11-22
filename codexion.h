@@ -6,7 +6,7 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 14:26:23 by osamet            #+#    #+#             */
-/*   Updated: 2026/11/19 20:32:07 by osamet           ###   ########.fr       */
+/*   Updated: 2026/11/22 23:37:14 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,95 +28,112 @@ typedef enum s_scheduler
 
 typedef struct s_thread
 {
-	pthread_t	thread;
+	pthread_t		thread;
 }	t_thread;
 
 typedef struct s_dongle
 {
-	int					id;
-	int					is_taken;
-	unsigned long long 	available_at;
+	int			id;
+	int			is_taken;
+	unsigned long long	available_at;
 	pthread_mutex_t		mutex;
 }	t_dongle;
 
 typedef struct s_coder
 {
-	int					id;
-	t_dongle			*left;
-	t_dongle			*right;
-	unsigned long long 	last_compile_start;
-	int					compile_count;
-	t_thread			thread;
+	int			id;
+	int			finish;
+	t_dongle		*left;
+	t_dongle		*right;
+	unsigned long long	last_compile_start;
+	int			compile_count;
+	t_thread		thread;
 	struct s_config		*config;
+	pthread_mutex_t		mutex;
 }	t_coder;
 
 typedef struct s_config
 {
-	int					nbr_coders;
-	int					nbr_dongles;
-	int					nbr_of_compiles_re;
+	int			stop;
+	int			nbr_coders;
+	int			nbr_dongles;
+	int			nbr_of_compiles_re;
 	unsigned long long	time_start;
 	unsigned long long	time_to_burnout;
 	unsigned long long	time_to_compile;
 	unsigned long long	time_to_debug;
 	unsigned long long	time_to_refactor;
 	unsigned long long	dongle_cooldown;
-	t_coder				*coders;
-	t_dongle			*dongles;
-	t_scheduler			scheduler;
+	t_coder			*coders;
+	t_dongle		*dongles;
+	t_scheduler		scheduler;
 	pthread_mutex_t		mutex_print;
+	pthread_mutex_t		mutex_stop;
+	t_thread		thread_monitor;
 }	t_config;
 
 //*************** main ***************//
-int			main(int argc, char **argv);
+int					main(int argc, char **argv);
 
 //*************** parsing ***************//
-void		parsing(int argc, char **argv, t_config *config);
-const char	*name_argument(int i);
+void				parsing(int argc, char **argv, t_config *config);
+const char			*name_argument(int i);
 
 //----- parsing nbr -----//
-void		parsing_nbr(char *str, t_config *config, int i);
-int			convert_nbr(char *str, int i);
+void				parsing_nbr(char *str, t_config *config, int i);
+int					convert_nbr(char *str, int i);
 
 //----- parsing time -----//
-void		parsing_time(char *str, t_config *config, int i);
-void		time_to_compile(char *str, t_config *config);
+void				parsing_time(char *str, t_config *config, int i);
+void				time_to_compile(char *str, t_config *config);
 unsigned long long	time_convert(char *str, int i);
 
 //----- parsing Scheduler -----//
-void		scheduler(char *str, t_config *config);
+void				scheduler(char *str, t_config *config);
 
 //*************** create structers ***************//
-void    	build_struct(t_config *config);
-void		create_coders_struct(t_config *config);
-void		create_dongle_struct(t_config *config);
-void    	create_threads(t_config *config);
-void		join_threads(t_config *config);
+void				build_struct(t_config *config);
+void				create_coders_struct(t_config *config);
+void				create_dongle_struct(t_config *config);
+void				create_threads(t_config *config);
+void				join_threads(t_config *config);
 
 //*************** init structers ***************//
-void	    init_dongle(t_config *config, t_dongle *dongles);
-void    	init_coders(t_config *config, t_coder *coders);
-void    	assigned_dongle_to_coders(t_config *config);
+void				init_config(t_config *config);
+void	    		init_dongle(t_config *config, t_dongle *dongles);
+void				init_coders(t_config *config, t_coder *coders);
+void				assigned_dongle_to_coders(t_config *config);
 
 //*************** outils ***************//
-int			ft_strlen(char *str);
-int			ft_isdigit(char *str);
-int			ft_strcamp(char *str1, char *str2);
-void    	all_free(t_config *config);
+int					ft_strlen(char *str);
+int					ft_isdigit(char *str);
+int					ft_strcamp(char *str1, char *str2);
+void				all_free(t_config *config);
 unsigned long long	time_ms(void);
 unsigned long long	ft_atoull(char *str);
 
 //*************** fonction coder ***************//
-void    	*coder_routine(void *arg);
-void    	logger(t_coder *coder, char *str);
-void    	compile(t_config *config, t_coder *coder);
-void    	debug(t_config *config, t_coder *coder);
-void    	refactor(t_config *config, t_coder *coder);
+void				*coder_routine(void *arg);
+void				logger(t_coder *coder, char *str);
+void				compile(t_config *config, t_coder *coder);
+void				debug(t_config *config, t_coder *coder);
+void				refactor(t_config *config, t_coder *coder);
 
 //*************** fonction dongle ***************//
-int			lock_dongle(t_dongle *left, t_dongle *right);
-void		unlock_dongle(t_dongle *left, t_dongle *right);
-void    	unlock_mutex(t_dongle *left, t_dongle *right);
-void    	lock_mutex(t_dongle *left, t_dongle *right);
+int					lock_dongle(t_dongle *left, t_dongle *right, t_coder *coder);
+void				unlock_dongle(t_dongle *left, t_dongle *right,
+					t_config *config);
+void				unlock_mutex(t_dongle *left, t_dongle *right);
+void				lock_mutex(t_dongle *left, t_dongle *right);
+int					check_cool_dongle(t_dongle *left, t_dongle *right);
+void				init_cool_dongle(t_dongle *dongle, t_config *config);
+
+//*************** fonction monitor ***************//
+void				*monitoring(void *arg);
+int					check_stop(t_config *config);
+void				init_stop(t_config *config, int i);
+int					check_finish_coders(t_config *config);
+int					check_burnout(int i, t_config *config);
+unsigned long long	init_burn(int i, t_config *config);
 
 #endif

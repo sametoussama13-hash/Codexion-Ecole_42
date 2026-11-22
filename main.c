@@ -6,7 +6,7 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/19 23:41:59 by osamet            #+#    #+#             */
-/*   Updated: 2026/11/19 15:35:03 by osamet           ###   ########.fr       */
+/*   Updated: 2026/11/21 16:29:12 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(int argc, char **argv)
 	// config->time_start = time_ms();
 	parsing(argc, argv, config);
 	build_struct(config);
-	
+
 	all_free(config);
 	return (0);
 }

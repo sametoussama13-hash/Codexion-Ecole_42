@@ -6,35 +6,45 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 15:40:49 by osamet            #+#    #+#             */
-/*   Updated: 2026/10/21 23:30:25 by osamet           ###   ########.fr       */
+/*   Updated: 2026/11/22 22:06:59 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../codexion.h"
 
-void    init_coders(t_config *config, t_coder *coders)
+void	init_config(t_config *config)
 {
-    int i;
+	config->stop = 0;
+	config->time_start = time_ms();
+	pthread_mutex_init(&config->mutex_print, NULL);
+	pthread_mutex_init(&config->mutex_stop, NULL);
+}
 
-    i = 0;
+void	init_coders(t_config *config, t_coder *coders)
+{
+	int	i;
+
+	i = 0;
 	while (i < config->nbr_coders)
 	{
 		coders[i].id = i + 1;
+		coders[i].finish = 0;
 		coders[i].config = config;
 		coders[i].left = NULL;
 		coders[i].right = NULL;
 		coders[i].last_compile_start = 0;
 		coders[i].compile_count = 0;
+		pthread_mutex_init(&coders[i].mutex, NULL);
 		i ++;
 	}
 	config->coders = coders;
 }
 
-void    init_dongle(t_config *config, t_dongle *dongles)
+void	init_dongle(t_config *config, t_dongle *dongles)
 {
-    int i;
+	int	i;
 
-    i = 0;
+	i = 0;
 	while (i < config->nbr_dongles)
 	{
 		dongles[i].id = i;
@@ -46,16 +56,16 @@ void    init_dongle(t_config *config, t_dongle *dongles)
 	config->dongles = dongles;
 }
 
-void    assigned_dongle_to_coders(t_config *config)
+void	assigned_dongle_to_coders(t_config *config)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (i < config->nbr_coders)
-    {
-        config->coders[i].left = &config->dongles[i];
-        config->coders[i].right = &config->dongles[((i + 1) % config->nbr_coders)];
-        i++;
-    }
+	i = 0;
+	while (i < config->nbr_coders)
+	{
+		config->coders[i].left = &config->dongles[i];
+		config->coders[i].right = &config->dongles[(
+				(i + 1) % config->nbr_coders)];
+		i++;
+	}
 }
-
