@@ -6,7 +6,7 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 15:40:49 by osamet            #+#    #+#             */
-/*   Updated: 2026/11/22 23:37:26 by osamet           ###   ########.fr       */
+/*   Updated: 2026/11/23 19:29:44 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	*coder_routine(void *arg)
 	{
 		if (check_stop(config) != 0)
 			return (NULL);
-		if (lock_dongle(coder->left, coder->right, coder) != 0)
+		if (lock_dongle(coder, config) != 0)
 			continue ;
 		compile(config, coder);
 		unlock_dongle(coder->left, coder->right, config);
@@ -64,4 +64,16 @@ void	refactor(t_config *config, t_coder *coder)
 {
 	logger(coder, "is refactoring");
 	usleep(config->time_to_refactor * 1000);
+}
+
+int		check_stop(t_config *config)
+{
+	pthread_mutex_lock(&config->mutex_stop);
+	if (config->stop == 1)
+	{
+		pthread_mutex_unlock(&config->mutex_stop);
+		return (1);
+	}
+	pthread_mutex_unlock(&config->mutex_stop);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 14:26:23 by osamet            #+#    #+#             */
-/*   Updated: 2026/11/22 23:37:14 by osamet           ###   ########.fr       */
+/*   Updated: 2026/11/23 19:40:40 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ typedef struct s_dongle
 {
 	int			id;
 	int			is_taken;
+	int			queu_size;
 	unsigned long long	available_at;
+	struct s_coder		*coders[2];
 	pthread_mutex_t		mutex;
 }	t_dongle;
 
@@ -120,13 +122,14 @@ void				debug(t_config *config, t_coder *coder);
 void				refactor(t_config *config, t_coder *coder);
 
 //*************** fonction dongle ***************//
-int					lock_dongle(t_dongle *left, t_dongle *right, t_coder *coder);
+int					lock_dongle(t_coder *coder, t_config *config);
 void				unlock_dongle(t_dongle *left, t_dongle *right,
 					t_config *config);
 void				unlock_mutex(t_dongle *left, t_dongle *right);
 void				lock_mutex(t_dongle *left, t_dongle *right);
-int					check_cool_dongle(t_dongle *left, t_dongle *right);
+int					check_cool_dongle(t_dongle *dongle);
 void				init_cool_dongle(t_dongle *dongle, t_config *config);
+int					check_dongle(t_coder *coder, t_config *config);
 
 //*************** fonction monitor ***************//
 void				*monitoring(void *arg);
@@ -135,5 +138,14 @@ void				init_stop(t_config *config, int i);
 int					check_finish_coders(t_config *config);
 int					check_burnout(int i, t_config *config);
 unsigned long long	init_burn(int i, t_config *config);
+
+//*************** monitor ticket ***************//
+void				init_ticket(t_coder *coder, t_config *config);
+
+//*************** scheduler ***************//
+int   				scheduler_fifo(t_coder *coder);
+void				handle_heap_fifo(t_coder *coder, t_dongle *dongle);
+void 				init_tas(t_dongle *left, t_dongle *right);
+void    			init_is_taken(t_coder *coder);
 
 #endif

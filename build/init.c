@@ -6,7 +6,7 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 15:40:49 by osamet            #+#    #+#             */
-/*   Updated: 2026/11/22 22:06:59 by osamet           ###   ########.fr       */
+/*   Updated: 2026/11/23 19:32:31 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	init_dongle(t_config *config, t_dongle *dongles)
 	while (i < config->nbr_dongles)
 	{
 		dongles[i].id = i;
+		dongles[i].queu_size = 0;
 		dongles[i].is_taken = 0;
 		dongles[i].available_at = 0;
 		pthread_mutex_init(&dongles[i].mutex, NULL);

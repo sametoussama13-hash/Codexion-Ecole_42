@@ -6,29 +6,40 @@
 /*   By: osamet <oussama.samet@learner.42.tech>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/21 14:26:23 by osamet            #+#    #+#             */
-/*   Updated: 2026/11/21 16:19:00 by osamet           ###   ########.fr       */
+/*   Updated: 2026/11/23 19:28:54 by osamet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../codexion.h"
 
-int	lock_dongle(t_dongle *left, t_dongle *right, t_coder *coder)
+int	lock_dongle(t_coder *coder, t_config *config)
 {
-	if (left == right)
+	if (coder->left == coder->right)
 		return (1);
-	lock_mutex(left, right);
-	if (left->is_taken == 1 || right->is_taken == 1
-		|| check_cool_dongle(left, right) != 0)
+	if (check_dongle(coder, config) != 0)
 	{
-		unlock_mutex(left, right);
+		unlock_mutex(coder->left, coder->right);
 		return (1);
 	}
-	left->is_taken = 1;
-	logger(coder, "has taken a dongle");
-	right->is_taken = 1;
-	logger(coder, "has taken a dongle");
-	unlock_mutex(left, right);
+	if (config->scheduler == FIFO && scheduler_fifo(coder) == 0)
+		return (0);
+	// else
+	// 	scheduler_fifo(coder);
+	return (1);
+}
 
+int		check_dongle(t_coder *coder, t_config *config)
+{
+	lock_mutex(coder->left, coder->right);
+	if (config->scheduler == FIFO)
+	{
+		handle_heap_fifo(coder, coder->left);
+		handle_heap_fifo(coder, coder->right);
+	}
+	if (coder->left->is_taken == 1|| check_cool_dongle(coder->left) != 0)
+		return (1);
+	if (coder->right->is_taken == 1 || check_cool_dongle(coder->right) != 0)
+		return (1);
 	return (0);
 }
 

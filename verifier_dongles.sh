@@ -5,7 +5,7 @@ cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 work=$(mktemp -d)
 trap 'rm -rf -- "$work"' EXIT
 cp -- Makefile ./*.c ./*.h "$work/"
-cp -R -- parsing outils coder_fonction dongle_fonction build "$work/"
+cp -R -- parsing outils coder_fonction dongle_fonction build scheduler "$work/"
 CCACHE_DISABLE=1 make -s -B -C "$work"
 
 status=0
